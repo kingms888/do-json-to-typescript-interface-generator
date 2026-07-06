@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+  <title>JSON to TypeScript Interface Generator · dev tool</title>
+  <meta name="description" content="Convert JSON samples to TypeScript interfaces instantly. Pure frontend, AI-friendly, developer tool for TypeScript, JSON, and Shopify sellers.">
+  <meta name="keywords" content="json to typescript, json to interface, typescript generator, csv to yaml, shopify csv seo, developer tools, csv/json tools, shopify sellers, json to typescript interface generator">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="devtool.works">
+  <link rel="canonical" href="https://devtool.works/json-to-typescript">
+
+  <!-- Open Graph / social preview -->
+  <meta property="og:title" content="JSON to TypeScript Interface Generator">
+  <meta property="og:description" content="Instant, browser‑side JSON → TypeScript interfaces. No server, no upload. AI‑friendly & fast.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://devtool.works/json-to-typescript">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Inline CSS – polished, mobile-first, minimal -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #f6f9fc;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      padding: 1.25rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #1a2634;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      flex: 1;
+    }
+
+    /* header */
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    header h1 {
+      font-size: 2.2rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      background: linear-gradient(145deg, #1e2b3a, #0f1a24);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: inline-block;
+      padding-bottom: 0.25rem;
+    }
+
+    .subhead {
+      color: #3b4b5e;
+      font-size: 1.1rem;
+      margin-top: 0.25rem;
+      border-bottom: 1px solid #dce5ed;
+      padding-bottom: 0.75rem;
+    }
+
+    /* main grid */
+    .tool-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    @media (max-width: 720px) {
+      .tool-grid {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+      }
+    }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(0, 20, 40, 0.06);
+      padding: 1.5rem 1.5rem 1.75rem;
+      transition: box-shadow 0.15s;
+      border: 1px solid #e9edf2;
+    }
+
+    .card h2 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: #14222e;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 220px;
+      padding: 1rem;
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      border: 1px solid #d7e0e8;
+      border-radius: 14px;
+      background: #fafcff;
+      resize: vertical;
+      transition: border 0.2s;
+      color: #1a2634;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: #3f7cbf;
+      box-shadow: 0 0 0 3px rgba(63, 124, 191, 0.15);
+    }
+
+    .output-area {
+      background: #f2f6fb;
+      border-radius: 14px;
+      padding: 1rem;
+      min-height: 220px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      border: 1px solid #d7e0e8;
+      overflow: auto;
+      max-height: 400px;
+    }
+
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 1rem;
+      align-items: center;
+    }
+
+    .btn {
+      background: #1e2b3a;
+      border: none;
+      color: white;
+      font-weight: 500;
+      padding: 0.6rem 1.4rem;
+      border-radius: 40px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .btn:hover {
+      background: #2c3f53;
+    }
+
+    .btn:active {
+      transform: scale(0.96);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid #bcc9d6;
+      color: #1e2b3a;
+      box-shadow: none;
+    }
+
+    .btn-outline:hover {
+      background: #e9edf2;
+    }
+
+    .badge {
+      background: #e6edf5;
+      border-radius: 40px;
+      padding: 0.2rem 0.9rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #1e3a5f;
+      margin-left: 0.5rem;
+    }
+
+    .placeholder-ad {
+      background: #f0f4fa;
+      border-radius: 16px;
+      padding: 1.2rem 1.5rem;
+      margin: 1.8rem 0 1.2rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px dashed #b9cbdd;
+    }
+
+    .placeholder-ad p {
+      font-weight: 500;
+      color: #1f3348;
+    }
+
+    .placeholder-ad .ad-link {
+      background: white;
+      border-radius: 40px;
+      padding: 0.4rem 1.2rem;
+      border: 1px solid #b0c4d9;
+      font-size: 0.9rem;
+      color: #1f3a57;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .affiliate-resources {
+      background: #ffffffdd;
+      backdrop-filter: blur(2px);
+      border-radius: 20px;
+      padding: 1.5rem 1.8rem;
+      margin: 2rem 0 1.5rem;
+      border: 1px solid #dce5ed;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .affiliate-resources span {
+      font-weight: 500;
+      color: #142633;
+    }
+
+    .affiliate-links a {
+      display: inline-block;
+      margin-left: 1.2rem;
+      color: #1f4b77;
+      text-decoration: none;
+      font-weight: 500;
+      border-bottom: 1px dotted #8aaac9;
+    }
+
+    .affiliate-links a:hover {
+      border-bottom: 1px solid #1f4b77;
+    }
+
+    .privacy-note {
+      margin-top: 2.5rem;
+      font-size: 0.8rem;
+      color: #4b627a;
+      background: #eef3f9;
+      padding: 0.8rem 1.2rem;
+      border-radius: 40px;
+      display: inline-block;
+      border: 1px solid #d7e0ea;
+    }
+
+    footer {
+      margin-top: 2.5rem;
+      text-align: center;
+      color: #5b7087;
+      font-size: 0.85rem;
+      border-top: 1px solid #dce5ed;
+      padding-top: 1.5rem;
+    }
+
+    .copy-feedback {
+      font-size: 0.8rem;
+      color: #2c6b2c;
+      margin-left: 0.5rem;
+      opacity: 0.8;
+    }
+
+    .inline-message {
+      margin-top: 0.3rem;
+      font-size: 0.8rem;
+      color: #b13e3e;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>⚡ JSON ➔ TypeScript</h1>
+    <div class="subhead">interface generator · paste JSON, get clean types</div>
+  </header>
+
+  <!-- Core tool: two columns (input / output) -->
+  <div class="tool-grid">
+    <div class="card">
+      <h2>
+        <span>📄 JSON input</span>
+        <span class="badge">sample</span>
+      </h2>
+      <textarea id="jsonInput" placeholder='Paste JSON here, e.g. { "name": "Dev", "age": 30, "skills": ["ts","go"] }'>{ "name": "Alice", "age": 30, "active": true, "meta": { "role": "developer", "years": 5 }, "tags": ["typescript", "api"] }</textarea>
+      <div class="button-group">
+        <button class="btn" id="convertBtn">✨ Generate interface</button>
+        <button class="btn btn-outline" id="clearBtn">Clear</button>
+        <button class="btn btn-outline" id="copyBtn">📋 Copy</button>
+      </div>
+      <div id="inputMessage" class="inline-message"></div>
+    </div>
+
+    <div class="card">
+      <h2>
+        <span>🧩 TypeScript interface</span>
+        <span class="badge">ready</span>
+      </h2>
+      <div id="tsOutput" class="output-area" aria-label="Generated TypeScript interface">// interface will appear here</div>
+      <div class="button-group" style="justify-content: flex-end;">
+        <span style="font-size:0.75rem; color:#4f6b85;">⬇️ nested supported</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ad placeholder (visible, relevant) -->
+  <div class="placeholder-ad">
+    <p>📘 <strong>TypeScript Superpowers</strong> – full course & VS Code tips</p>
+    <a href="#" class="ad-link" onclick="reportEvent('ad_click', {ad:'typescript_course'}); return false;">🔍 Learn more →</a>
+  </div>
+
+  <!-- Affiliate / resource placeholder -->
+  <div class="affiliate-resources">
+    <span>🧰 Dev essentials &nbsp;·&nbsp; <span style="font-weight:400;">TypeScript, JSON, Shopify CSV tools</span></span>
+    <span class="affiliate-links">
+      <a href="#" onclick="reportEvent('affiliate_click', {resource:'vscode'}); return false;">VS Code course</a>
+      <a href="#" onclick="reportEvent('affiliate_click', {resource:'typescript'}); return false;">TS handbook</a>
+      <a href="#" onclick="reportEvent('affiliate_click', {resource:'shopify'}); return false;">Shopify SEO</a>
+    </span>
+  </div>
+
+  <!-- Privacy note + event reporter -->
+  <div class="privacy-note">
+    🔒 Events may be counted anonymously for product improvement. No personal data collected.
+  </div>
+
+  <footer>
+    <span>JSON to TypeScript · pure frontend · v1.0</span>
+  </footer>
+</div>
+
+<script>
+  (function() {
+    // ---------- DOM refs ----------
+    const inputEl = document.getElementById('jsonInput');
+    const outputEl = document.getElementById('tsOutput');
+    const convertBtn = document.getElementById('convertBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const copyBtn = document.getElementById('copyBtn');
+    const inputMessage = document.getElementById('inputMessage');
+
+    // ---------- Core conversion: JSON → TypeScript interface ----------
+    function jsonToTypeScript(obj, name = 'RootInterface', indent = 0) {
+      const pad = '  '.repeat(indent);
+      const padInner = '  '.repeat(indent + 1);
+
+      if (obj === null || obj === undefined) {
+        return `${pad}${name}: any;`;
+      }
+
+      if (Array.isArray(obj)) {
+        // infer from first element, fallback any[]
+        if (obj.length === 0) {
+          return `${pad}${name}: any[];`;
+        }
+        // use first element as representative
+        const itemType = inferType(obj[0], indent);
+        // if item is object, we need to generate inline interface
+        if (typeof obj[0] === 'object' && obj[0] !== null && !Array.isArray(obj[0])) {
+          const nestedName = name + 'Item';
+          const nested = jsonToTypeScript(obj[0], nestedName, indent + 1);
+          // extract just the type body
+          const lines = nested.split('\n');
+          let bodyLines = [];
+          let started = false;
+          for (let line of lines) {
+            if (line.includes(`interface ${nestedName}`)) { started = true; continue; }
+            if (started && line.trim() === '}') { break; }
+            if (started) bodyLines.push(line);
+          }
+          const bodyStr = bodyLines.join('\n');
+          return `${pad}interface ${name} {\n${padInner}"${name}": ${nestedName};\n${pad}}`;
+        } else {
+          const simpleType = typeof obj[0] === 'string' ? 'string' : typeof obj[0] === 'number' ? 'number' : typeof obj[0] === 'boolean' ? 'boolean' : 'any';
+          return `${pad}interface ${name} {\n${padInner}"${name}": ${simpleType}[];\n${pad}}`;
+        }
+      }
+
+      if (typeof obj === 'object') {
+        const keys = Object.keys(obj);
+        let fields = '';
+        for (const key of keys) {
+          const val = obj[key];
+          const fieldType = inferType(val, indent + 1);
+          if (typeof val === 'object' && val !== null && !Array.isArray(val)) {
+            // nested object -> generate subinterface
+            const subName = key.charAt(0).toUpperCase() + key.slice(1).replace(/[^a-zA-Z0-9_]/g, '_');
+            const subInterface = jsonToTypeScript(val, subName, indent + 1);
+            // extract sub interface lines and append before field
+            const subLines = subInterface.split('\n');
+            let subDef = '';
+            let inSub = false;
+            for (let line of subLines) {
+              if (line.includes(`interface ${subName}`)) { inSub = true; }
+              if (inSub) subDef += line + '\n';
+            }
+            // add sub definition before field
+            fields += subDef;
+            fields += `${padInner}"${key}": ${subName};\n`;
+          } else if (Array.isArray(val)) {
+            // array handling
+            if (val.length === 0) {
+              fields += `${padInner}"${key}": any[];\n`;
+            } else {
+              const first = val[0];
+              if (typeof first === 'object' && first !== null) {
+                const arrTypeName = key.charAt(0).toUpperCase() + key.slice(1).replace(/[^a-zA-Z0-9_]/g, '_') + 'Item';
+                const arrInterface = jsonToTypeScript(first, arrTypeName, indent + 1);
+                const arrLines = arrInterface.split('\n');
+                let arrDef = '';
+                let inArr = false;
+                for (let line of arrLines) {
+                  if (line.includes(`interface ${arrTypeName}`)) { inArr = true; }
+                  if (inArr) arrDef += line + '\n';
+                }
+                fields += arrDef;
+                fields += `${padInner}"${key}": ${arrTypeName}[];\n`;
+              } else {
+                const simpleType = typeof first === 'string' ? 'string' : typeof first === 'number' ? 'number' : typeof first === 'boolean' ? 'boolean' : 'any';
+                fields += `${padInner}"${key}": ${simpleType}[];\n`;
+              }
+            }
+          } else {
+            fields += `${padInner}"${key}": ${fieldType};\n`;
+          }
+        }
+        return `${pad}interface ${name} {\n${fields}${pad}}`;
+      }
+
+      // primitive fallback
+      return `${pad}${name}: ${typeof obj};`;
+    }
+
+    function inferType(val, indent) {
+      if (val === null || val === undefined) return 'any';
+      if (Array.isArray(val)) {
+        if (val.length === 0) return 'any[]';
+        const first = val[0];
+        if (typeof first === 'object') return 'any[]';
+        return typeof first + '[]';
+      }
+      if (typeof val === 'object') return 'object'; // will be replaced by subinterface
+      return typeof val;
+    }
+
+    // main conversion function
+    function generateInterface() {
+      const raw = inputEl.value.trim();
+      if (!raw) {
+        outputEl.textContent = '// Please paste valid JSON';
+        inputMessage.textContent = '';
+        return;
+      }
+
+      let parsed;
+      try {
+        parsed = JSON.parse(raw);
+      } catch (e) {
+        outputEl.textContent = '// ❌ Invalid JSON — check commas, quotes, brackets';
+        inputMessage.textContent = '⚠️  JSON parse error';
+        return;
+      }
+      inputMessage.textContent = '';
+
+      let result;
+      if (Array.isArray(parsed)) {
+        // if top-level array, generate interface for array items
+        if (parsed.length === 0) {
+          result = '// empty array — no interface generated';
+        } else {
+          const sample = parsed[0];
+          if (typeof sample === 'object' && sample !== null) {
+            result = jsonToTypeScript(sample, 'RootInterface', 0);
+          } else {
+            result = `type RootInterface = ${typeof sample}[];`;
+          }
+        }
+      } else if (typeof parsed === 'object' && parsed !== null) {
+        result = jsonToTypeScript(parsed, 'RootInterface', 0);
+      } else {
+        result = `// primitive value: type RootInterface = ${typeof parsed};`;
+      }
+
+      outputEl.textContent = result;
+      reportEvent('conversion', { type: typeof parsed, length: raw.length });
+    }
+
+    // ---------- helpers ----------
+    function clearAll() {
+      inputEl.value = '';
+      outputEl.textContent = '// interface will appear here';
+      inputMessage.textContent = '';
+    }
+
+    function copyOutput() {
+      const text = outputEl.textContent;
+      if (!text || text.startsWith('// interface will')) {
+        inputMessage.textContent = '⚠️ nothing to copy';
+        return;
+      }
+      navigator.clipboard.writeText(text).then(() => {
+        inputMessage.textContent = '✅ copied!';
+        setTimeout(() => { inputMessage.textContent = ''; }, 2000);
+      }).catch(() => {
+        inputMessage.textContent = '⚠️ copy failed';
+      });
+    }
+
+    // ---------- event reporting (privacy safe) ----------
+    window.reportEvent = function(name, payload = {}) {
+      if (typeof window.ORGANISM_METRICS_ENDPOINT === 'string' && window.ORGANISM_METRICS_ENDPOINT) {
+        try {
+          const body = JSON.stringify({ event: name, payload, timestamp: Date.now() });
+          fetch(window.ORGANISM_METRICS_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: body,
+            keepalive: true
+          }).catch(() => {}); // silently fail
+        } catch (e) {}
+      }
+    };
+
+    // set dummy endpoint for demo (no actual tracking)
+    // in production, set via config. For this demo we leave undefined or set a placeholder.
+    // We'll set a placeholder that does nothing.
+    window.ORGANISM_METRICS_ENDPOINT = undefined;  // no tracking unless configured
+
+    // ---------- bind events ----------
+    convertBtn.addEventListener('click', generateInterface);
+    clearBtn.addEventListener('click', clearAll);
+    copyBtn.addEventListener('click', copyOutput);
+
+    // auto-convert on page load with default sample
+    window.addEventListener('DOMContentLoaded', function() {
+      generateInterface();
+      // report page view (anonymous)
+      reportEvent('page_view', { tool: 'json-to-ts' });
+    });
+
+    // optional: convert on Ctrl+Enter inside textarea
+    inputEl.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault();
+        generateInterface();
+      }
+    });
+
+  })();
+</script>
+
+<section data-organism-discovery="hub" style="margin:32px auto 20px;max-width:1040px;padding:16px;border-top:1px solid #d9e2ec;color:#475569;font:14px/1.5 system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
+  <strong style="display:block;color:#0f172a;margin-bottom:6px">More free browser tools</strong>
+  <p style="margin:0 0 8px">This page is part of an autonomous micro-tool network. Explore the live tool directory and related utilities.</p>
+  <p style="margin:0"><a href="https://kingms888.github.io/do-digital-organism-index/" style="color:#0f766e;font-weight:700">Open the tool directory</a> </p>
+</section>
+</body>
+</html>
